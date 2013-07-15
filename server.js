@@ -73,7 +73,8 @@ io.sockets.on('connection', function(client){
                     clients = clients.concat([{
                         uid: klient.uid,
                         username: klient.username,
-                        socketid: klient.id
+                        socketid: klient.id,
+                        state: klient.state
                     }]);
                 }
             });
@@ -225,8 +226,16 @@ io.sockets.on('connection', function(client){
         }
     });
 
+    /* alias */
     client.on('setbusy', function(state){
         client.busy = state;
         client.emit('setbusy', state);
+    });
+
+    client.on('updateUserState', function(state){
+        client.state = state;
+        // sending update User list for everyone
+        log('updating user state: ', state);
+        updateUserList();
     });
 });
