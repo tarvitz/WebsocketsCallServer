@@ -41,12 +41,14 @@ io.sockets.on('connection', function(client){
         log('getClients for room: ', room);
         for (klient in io.sockets.clients(room)){
             _client = io.sockets.clients(room)[klient];
-            clients.push({
-                'username': _client.username,
-                'uid': _client.uid,
-                'socketid': _client.id,
-                'state': 'free',
-            });
+            if (! _client.hidden){
+                clients.push({
+                    'username': _client.username,
+                    'uid': _client.uid,
+                    'socketid': _client.id,
+                    'state': 'free',
+                });
+            }
         }
         return clients;
     }
@@ -67,11 +69,13 @@ io.sockets.on('connection', function(client){
         var clients = [];
         if (room){
             io.sockets.clients(room).map(function(klient){
-                clients = clients.concat([{
-                    uid: klient.uid,
-                    username: klient.username,
-                    socketid: klient.id
-                }]);
+                if (! klient.hidden){
+                    clients = clients.concat([{
+                        uid: klient.uid,
+                        username: klient.username,
+                        socketid: klient.id
+                    }]);
+                }
             });
         }
         return clients;
@@ -149,6 +153,7 @@ io.sockets.on('connection', function(client){
         client.username = data.username;
         client.uid = data.uid;
         client.state = 'free'; //free|busy
+        client.hidden = data.hidden;
 
         if (debug) log("registeruser: ", usernames[data.socketid]);
         alreadyLogged = checkUserPresence(client.uid);
