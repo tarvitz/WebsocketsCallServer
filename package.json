@@ -1,0 +1,14 @@
+{
+  "name": "WebsocketsCallServer",
+  "version": "0.0.2",
+  "main": "./server.js",
+  "description": "Websockets helper for call client negotiations",
+  "dependencies": {
+    "socket.io": "0.9.16",
+    "wildemitter": "0.0.5"
+  },
+  "devDependencies": {
+    "browserify": "2.22.0",
+    "uglify-js": "2.3.6"
+  }
+}
